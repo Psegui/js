@@ -1,0 +1,51 @@
+function AbrirFichero(fichXML) {
+    var xmlDoc = undefined;
+    try {
+        if (document.all) //IE {
+            xmlDoc = new ActiveXObject("Microsoft.XMLDOM"); }
+        else //firefox {
+            xmlDoc = document.implementation.createDocument("", "", null);
+        }
+        xmlDoc.async = false;
+        xmlDoc.load(fichXML);
+    }
+    catch (e) {
+        try { //otros safari, chrome
+            var xmlhttp = new window.XMLHttpRequest();
+            xmlhttp.open("GET", fichXML, false);
+            xmlhttp.send(null);
+            xmlDoc = xmlhttp.responseXML.documentElement;
+            return xmlDoc;
+        }
+        catch (e) {
+            return undefined;
+        }
+    }
+    return xmlDoc;
+}function CargarXMLQuestions() {
+
+    try {
+        xmlDoc = AbrirFichero("/questions.xml");
+        eventosXML = xmlDoc.getElementsByTagName('question');
+        if (eventosXML.length > 0) {
+            eventos = new Array(); //clase con los datos cargados
+        }
+        for (var i = 0; i < questionsXML.length; i++) {
+// Aquí obtengo el valor por el nombre de la etiqueta
+            xmlQuestion = questionsXML[i];
+            Pregunta = GetValue("fecha");
+            hora = GetValue("hora");
+            comentario = GetValue("comentario");
+        }
+        return eventos;
+    }
+    catch (e) {
+        alert("Se produjo un error en la carga de los datos");
+    }
+}function GetValue(atributo) {
+    var valor = xmlEvento.getElementsByTagName(atributo);
+    if (valor[0] != null && valor[0] != undefined)
+        return valor[0].firstChild.nodeValue;
+    else
+        return null;
+}
